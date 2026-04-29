@@ -33,7 +33,7 @@ Vercel, the Vercel design, Next.js and related marks, designs and logos are
 trademarks or registered trademarks of Vercel, Inc. or its affiliates in the US
 and other countries.
 
-Documentation licensed under the [MIT License, Version 2.0][license].<br/>
+Documentation licensed under the [MIT License][license].<br/>
 The original work was translated from English into Brazilian Portuguese.
 
 [badge-contributors]: https://img.shields.io/github/contributors/docsdevbr/nextjs-doc-pt-br
