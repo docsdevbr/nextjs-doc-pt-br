@@ -1,0 +1,526 @@
+---
+# SPDX-FileCopyrightText: 2026 Vercel, Inc.
+# Vercel, the Vercel design, Next.js and related marks, designs and logos are
+# trademarks or registered trademarks of Vercel, Inc. or its affiliates in the
+# US and other countries.
+#
+# SPDX-License-Identifier: MIT
+# Documentation licensed under the MIT License.
+# The original work was translated from English into Brazilian Portuguese.
+# https://github.com/docsdevbr/nextjs-doc-pt-br/blob/-/LICENSES/MIT.txt
+
+source_url: https://github.com/vercel/next.js/blob/canary/docs/01-app/01-getting-started/01-installation.mdx
+revision: 872c01b5e6f42b725e5626ab5bd5ff42608c2ad8
+status: ready
+
+title: Instalação
+description: >-
+  Aprenda como criar uma nova aplicação Next.js com a CLI `create-next-app` e
+  configurar o TypeScript, o ESLint e os aliases de caminhos de módulos.
+---
+
+{/* The content of this doc is shared between the app and pages router. You can use the `<PagesOnly>Content</PagesOnly>` component to add content that is specific to the Pages Router. Any shared content should not be wrapped in a component. */}
+
+<AppOnly>
+
+Crie uma nova aplicação Next.js e execute-a localmente.
+
+## Início rápido
+
+1. Crie uma nova aplicação Next.js chamada `my-app`.
+2. Acesse o diretório `my-app` e inicie o servidor de desenvolvimento.
+3. Visite `http://localhost:3000`.
+
+```bash package="pnpm"
+pnpm create next-app@latest my-app --yes
+cd my-app
+pnpm dev
+```
+
+```bash package="npm"
+npx create-next-app@latest my-app --yes
+cd my-app
+npm run dev
+```
+
+```bash package="yarn"
+yarn create next-app@latest my-app --yes
+cd my-app
+yarn dev
+```
+
+```bash package="bun"
+bun create next-app@latest my-app --yes
+cd my-app
+bun dev
+```
+
+- `--yes` ignora os prompts usando preferências salvas ou valores padrão.
+  A configuração padrão habilita TypeScript, Tailwind CSS, ESLint, App Router e
+  Turbopack, com o alias de importação `@/*`, e inclui o arquivo `AGENTS.md`
+  (com um arquivo `CLAUDE.md` que o referencia) para orientar os agentes de
+  codificação a escrever código Next.js atualizado.
+
+</AppOnly>
+
+## Requisitos de sistema
+
+Antes de começar, certifique-se de que seu ambiente de desenvolvimento atenda
+aos seguintes requisitos:
+
+- Versão mínima do Node.js: [20.9](https://nodejs.org/)
+- Sistemas operacionais: macOS, Windows (incluindo WSL) e Linux.
+
+## Navegadores compatíveis
+
+O Next.js é compatível com navegadores modernos sem necessidade de configuração.
+
+- Chrome 111+
+- Edge 111+
+- Firefox 111+
+- Safari 16.4+
+
+Saiba mais sobre o
+[suporte a navegadores](/docs/architecture/supported-browsers), incluindo como
+configurar polyfills e desenvolver para navegadores específicos.
+
+## Crie com a CLI
+
+A maneira mais rápida de criar uma nova aplicação Next.js é usando o
+[`create-next-app`](/docs/app/api-reference/cli/create-next-app), que configura
+tudo automaticamente para você.
+Para criar um projeto, execute:
+
+```bash package="pnpm"
+pnpm create next-app
+```
+
+```bash package="npm"
+npx create-next-app@latest
+```
+
+```bash package="yarn"
+yarn create next-app
+```
+
+```bash package="bun"
+bun create next-app
+```
+
+Durante a instalação, você verá as seguintes mensagens:
+
+```txt filename="Terminal"
+What is your project named? my-app
+Would you like to use the recommended Next.js defaults?
+    Yes, use recommended defaults - TypeScript, ESLint, Tailwind CSS, App Router, AGENTS.md
+    No, reuse previous settings
+    No, customize settings - Choose your own preferences
+```
+
+Se você optar por `customize settings` (personalizar as configurações), verá as
+seguintes mensagens:
+
+```txt filename="Terminal"
+Would you like to use TypeScript? No / Yes
+Which linter would you like to use? ESLint / Biome / None
+Would you like to use React Compiler? No / Yes
+Would you like to use Tailwind CSS? No / Yes
+Would you like your code inside a `src/` directory? No / Yes
+Would you like to use App Router? (recommended) No / Yes
+Would you like to customize the import alias (`@/*` by default)? No / Yes
+What import alias would you like configured? @/*
+Would you like to include AGENTS.md to guide coding agents to write up-to-date Next.js code? No / Yes
+```
+
+Após as instruções, o comando
+[`create-next-app`](/docs/app/api-reference/cli/create-next-app) criará uma
+pasta com o nome do seu projeto e instalará as dependências necessárias.
+
+## Instalação manual
+
+Para criar manualmente uma nova aplicação Next.js, instale os pacotes
+necessários:
+
+```bash package="pnpm"
+pnpm i next@latest react@latest react-dom@latest
+```
+
+```bash package="npm"
+npm i next@latest react@latest react-dom@latest
+```
+
+```bash package="yarn"
+yarn add next@latest react@latest react-dom@latest
+```
+
+```bash package="bun"
+bun add next@latest react@latest react-dom@latest
+```
+
+> **Bom saber**:
+>
+> - O `App Router` usa as
+>   [versões canary integradas do React](https://react.dev/blog/2023/05/03/react-canaries),
+>   que incluem todas as alterações estáveis do React 19, bem como novos
+>   recursos validados em frameworks.
+>   No entanto, você ainda deve declarar o React e o react-dom no arquivo
+>   package.json para garantir a compatibilidade com ferramentas e o
+>   ecossistema.
+> - O `Pages Router` usa a versão do React definida no seu arquivo
+>   `package.json`.
+
+Em seguida, adicione os seguintes scripts ao seu arquivo `package.json`:
+
+```json filename="package.json"
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
+  }
+}
+```
+
+Esses scripts se referem às diferentes etapas de desenvolvimento de uma
+aplicação:
+
+- `next dev`: Inicia o servidor de desenvolvimento usando o Turbopack (bundler
+  padrão).
+- `next build`: Compila a aplicação para produção.
+- `next start`: Inicia o servidor de produção.
+- `eslint`: Executa o ESLint.
+
+O Turbopack agora é o bundler padrão.
+Para usar o Webpack, execute `next dev --webpack` ou `next build --webpack`.
+Consulte a [documentação do Turbopack](/docs/app/api-reference/turbopack) para
+obter detalhes sobre a configuração.
+
+<AppOnly>
+
+### Crie o diretório `app`
+
+O Next.js usa roteamento baseado no sistema de arquivos, o que significa que as
+rotas da sua aplicação são determinadas pela estrutura dos seus arquivos.
+
+Crie uma pasta `app`.
+Em seguida, dentro de `app`, crie um arquivo `layout.tsx`.
+Este arquivo é o
+[layout raiz](/docs/app/api-reference/file-conventions/layout#root-layout).
+Ele é obrigatório e deve conter as tags `<html>` e `<body>`.
+
+```tsx filename="app/layout.tsx" switcher
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  )
+}
+```
+
+```jsx filename="app/layout.js" switcher
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  )
+}
+```
+
+Crie uma página inicial `app/page.tsx` com algum conteúdo inicial:
+
+```tsx filename="app/page.tsx" switcher
+export default function Page() {
+  return <h1>Olá, Next.js!</h1>
+}
+```
+
+```jsx filename="app/page.js" switcher
+export default function Page() {
+  return <h1>Olá, Next.js!</h1>
+}
+```
+
+Tanto o arquivo `layout.tsx` quanto o `page.tsx` serão renderizados quando a
+pessoa usuária visitar a raiz da sua aplicação (`/`).
+
+<Image
+  alt="App Folder Structure"
+  srcLight="/docs/light/app-getting-started.png"
+  srcDark="/docs/dark/app-getting-started.png"
+  width="1600"
+  height="363"
+/>
+
+> **Bom saber**:
+>
+> - Se você esquecer de criar o layout raiz, o Next.js criará esse arquivo
+>   automaticamente ao executar o servidor de desenvolvimento com `next dev`.
+> - Opcionalmente, você pode usar um
+>   [diretório `src`](/docs/app/api-reference/file-conventions/src-folder) na
+>   raiz do seu projeto para separar o código da sua aplicação dos arquivos de
+>   configuração.
+
+</AppOnly>
+
+<PagesOnly>
+
+### Crie o diretório `pages`
+
+O Next.js usa roteamento baseado no sistema de arquivos, o que significa que as
+rotas da sua aplicação são determinadas pela estrutura dos seus arquivos.
+
+Crie um diretório `pages` na raiz do seu projeto.
+Em seguida, adicione um arquivo `index.tsx` dentro da pasta `pages`.
+Esta será a sua página inicial (`/`):
+
+```tsx filename="pages/index.tsx" switcher
+export default function Page() {
+  return <h1>Olá, Next.js!</h1>
+}
+```
+
+```jsx filename="pages/index.js" switcher
+export default function Page() {
+  return <h1>Olá, Next.js!</h1>
+}
+```
+
+Em seguida, adicione um arquivo `_app.tsx` dentro de `pages/` para definir o
+layout global.
+Saiba mais sobre o
+[arquivo App personalizado](/docs/pages/building-your-application/routing/custom-app).
+
+```tsx filename="pages/_app.tsx" switcher
+import type { AppProps } from 'next/app'
+
+export default function App({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />
+}
+```
+
+```jsx filename="pages/_app.js" switcher
+export default function App({ Component, pageProps }) {
+  return <Component {...pageProps} />
+}
+```
+
+Por fim, adicione um arquivo `_document.tsx` dentro de `pages/` para controlar a
+resposta inicial do servidor.
+Saiba mais sobre o
+[arquivo Document personalizado](/docs/pages/building-your-application/routing/custom-document).
+
+```tsx filename="pages/_document.tsx" switcher
+import { Html, Head, Main, NextScript } from 'next/document'
+
+export default function Document() {
+  return (
+    <Html>
+      <Head />
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  )
+}
+```
+
+```jsx filename="pages/_document.js" switcher
+import { Html, Head, Main, NextScript } from 'next/document'
+
+export default function Document() {
+  return (
+    <Html>
+      <Head />
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  )
+}
+```
+
+</PagesOnly>
+
+### Crie a pasta `public` (opcional)
+
+Crie uma
+[pasta `public`](/docs/app/api-reference/file-conventions/public-folder) na raiz
+do seu projeto para armazenar arquivos estáticos, como imagens, fontes, etc.
+Os arquivos dentro de `public` podem ser referenciados pelo seu código a partir
+da URL base (`/`).
+
+Você pode então referenciar esses arquivos usando o caminho raiz (`/`).
+Por exemplo, `public/profile.png` pode ser referenciado como `/profile.png`:
+
+```tsx filename="app/page.tsx" highlight={4} switcher
+import Image from 'next/image'
+
+export default function Page() {
+  return <Image src="/profile.png" alt="Profile" width={100} height={100} />
+}
+```
+
+```jsx filename="app/page.js" highlight={4} switcher
+import Image from 'next/image'
+
+export default function Page() {
+  return <Image src="/profile.png" alt="Profile" width={100} height={100} />
+}
+```
+
+## Execute o servidor de desenvolvimento
+
+1. Execute `npm run dev` para iniciar o servidor de desenvolvimento.
+2. Acesse `http://localhost:3000` para visualizar sua aplicação.
+3. Edite o arquivo
+   `<AppOnly>`app/page.tsx`</AppOnly><PagesOnly>`pages/index.tsx`</PagesOnly> e
+   salve-o para visualizar o resultado atualizado no seu navegador.
+
+## Configure o TypeScript
+
+> Versão mínima do TypeScript: `v5.1.0`.
+
+O Next.js já vem com suporte integrado ao TypeScript.
+Para adicionar o TypeScript ao seu projeto, renomeie um arquivo para `.ts` /
+`.tsx` e execute `next dev`.
+O Next.js instalará automaticamente as dependências necessárias e adicionará um
+arquivo `tsconfig.json` com as opções de configuração recomendadas.
+
+<AppOnly>
+
+### Plugin para IDE
+
+O Next.js inclui um plugin TypeScript personalizado e um verificador de tipos,
+que o VS Code e outros editores de código podem usar para verificação de tipos
+avançada e autocompletar.
+
+Você pode habilitar o plugin no VS Code da seguinte forma:
+
+1. Abra a paleta de comandos (`Ctrl/⌘` + `Shift` + `P`).
+2. Procure por "TypeScript: Select TypeScript Version" (TypeScript: Selecionar
+   versão do TypeScript).
+3. Selecione "Use Workspace Version" (Usar versão do workspace").
+
+<Image
+  alt="TypeScript Command Palette"
+  srcLight="/docs/light/typescript-command-palette.png"
+  srcDark="/docs/dark/typescript-command-palette.png"
+  width="1600"
+  height="637"
+/>
+
+</AppOnly>
+
+Consulte a página de
+[referência do TypeScript](/docs/app/api-reference/config/typescript) para obter
+mais informações.
+
+## Configure o linting
+
+O Next.js oferece suporte ao linting (verificação de código) com ESLint ou
+Biome.
+Escolha um linter (verificador de código) e execute-o diretamente por meio de
+scripts no `package.json`.
+
+- Use o **ESLint** (regras abrangentes):
+
+```json filename="package.json"
+{
+  "scripts": {
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
+  }
+}
+```
+
+- Ou use o **Biome** (linter e formatador rápidos):
+
+```json filename="package.json"
+{
+  "scripts": {
+    "lint": "biome check",
+    "format": "biome format --write"
+  }
+}
+```
+
+Se o seu projeto usava anteriormente o `next lint`, migre seus scripts para a
+CLI do ESLint com o codemod:
+
+```bash filename="Terminal"
+npx @next/codemod@canary next-lint-to-eslint-cli .
+```
+
+Se você usa o ESLint, crie uma configuração explícita (recomenda-se
+`eslint.config.mjs`).
+O ESLint suporta o formato
+[legado `.eslintrc.*` e o mais recente `eslint.config.mjs`](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-eslint).
+Consulte a
+[referência da API do ESLint](/docs/app/api-reference/config/eslint#with-core-web-vitals)
+para obter uma configuração recomendada.
+
+> **Bom saber**: A partir do Next.js 16, o comando `next build` não executa mais
+> o linter automaticamente.
+> Em vez disso, você pode executar o linter por meio de scripts NPM.
+
+Consulte a página do [Plugin ESLint](/docs/app/api-reference/config/eslint) para
+obter mais informações.
+
+## Configure importações absolutas e aliases de caminho de módulo
+
+O Next.js oferece suporte integrado às opções `"paths"` e `"baseUrl"` dos
+arquivos `tsconfig.json` e `jsconfig.json`.
+
+Essas opções permitem que você crie aliases para diretórios do projeto com
+caminhos absolutos, facilitando e simplificando a importação de módulos.
+Por exemplo:
+
+```jsx
+// Antes
+import { Button } from '../../../components/button'
+
+// Depois
+import { Button } from '@/components/button'
+```
+
+Para configurar importações absolutas, adicione a opção de configuração
+`baseUrl` ao seu arquivo `tsconfig.json` ou `jsconfig.json`.
+Por exemplo:
+
+```json filename="tsconfig.json ou jsconfig.json"
+{
+  "compilerOptions": {
+    "baseUrl": "src/"
+  }
+}
+```
+
+Além de configurar o caminho `baseUrl`, você pode usar a opção `"paths"` para
+criar aliases para os caminhos dos módulos.
+
+Por exemplo, a seguinte configuração mapeia `@/components/*` para
+`components/*`:
+
+```json filename="tsconfig.json ou jsconfig.json"
+{
+  "compilerOptions": {
+    "baseUrl": "src/",
+    "paths": {
+      "@/styles/*": ["styles/*"],
+      "@/components/*": ["components/*"]
+    }
+  }
+}
+```
+
+Cada um dos `"paths"` é relativo à localização `baseUrl`.
