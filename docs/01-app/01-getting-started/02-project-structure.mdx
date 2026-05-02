@@ -1,0 +1,524 @@
+---
+# SPDX-FileCopyrightText: 2026 Vercel, Inc.
+# Vercel, the Vercel design, Next.js and related marks, designs and logos are
+# trademarks or registered trademarks of Vercel, Inc. or its affiliates in the
+# US and other countries.
+#
+# SPDX-License-Identifier: MIT
+# Documentation licensed under the MIT License.
+# The original work was translated from English into Brazilian Portuguese.
+# https://github.com/docsdevbr/nextjs-doc-pt-br/blob/-/LICENSES/MIT.txt
+
+source_url: https://github.com/vercel/next.js/blob/canary/docs/01-app/01-getting-started/02-project-structure.mdx
+revision: 22caab867664cd99a684cf7129c2006027d117ca
+status: ready
+
+title: Estrutura do projeto e organização
+nav_title: Estrutura do projeto
+description: >-
+  Aprenda as convenções de pastas e arquivos no Next.js e como organizar seu
+  projeto.
+---
+
+Esta página fornece uma visão geral de **todas** as convenções de pastas e
+arquivos no Next.js e recomendações para organizar seu projeto.
+
+## Convenções de pastas e arquivos
+
+### Pastas de nível superior
+
+As pastas de nível superior são usadas para organizar o código e os arquivos
+estáticos da sua aplicação.
+
+<Image
+  alt="Segmentos de rota para segmentos de caminho"
+  srcLight="/docs/light/top-level-folders.png"
+  srcDark="/docs/dark/top-level-folders.png"
+  width="1600"
+  height="525"
+/>
+
+|                                                                    |                                             |
+| ------------------------------------------------------------------ |---------------------------------------------|
+| [`app`](/docs/app)                                                 | App Router                                  |
+| [`pages`](/docs/pages/building-your-application/routing)           | Pages Router                                |
+| [`public`](/docs/app/api-reference/file-conventions/public-folder) | Ativos estáticos a serem servidos           |
+| [`src`](/docs/app/api-reference/file-conventions/src-folder)       | Pasta opcional de código-fonte da aplicação |
+
+### Arquivos de nível superior
+
+Os arquivos de nível superior são usados para configurar sua aplicação,
+gerenciar dependências, executar o proxy, integrar ferramentas de monitoramento
+e definir variáveis de ambiente.
+
+|                                                                            |                                                                                                  |
+|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| **Next.js**                                                                |                                                                                                  |
+| [`next.config.js`](/docs/app/api-reference/config/next-config-js)          | Arquivo de configuração do Next.js                                                               |
+| [`package.json`](/docs/app/getting-started/installation#instalação-manual) | Dependências e scripts do projeto                                                                |
+| [`instrumentation.ts`](/docs/app/guides/instrumentation)                   | Arquivo de instrumentação e do OpenTelemetry                                                     |
+| [`proxy.ts`](/docs/app/api-reference/file-conventions/proxy)               | Proxy de requisição Next.js                                                                      |
+| [`.env`](/docs/app/guides/environment-variables)                           | Variáveis de ambiente (não devem ser rastreadas pelo controle de versão)                         |
+| [`.env.local`](/docs/app/guides/environment-variables)                     | Variáveis de ambiente locais (não devem ser rastreadas pelo controle de versão)                  |
+| [`.env.production`](/docs/app/guides/environment-variables)                | Variáveis de ambiente de produção (não devem ser rastreadas pelo controle de versão)             |
+| [`.env.development`](/docs/app/guides/environment-variables)               | Variáveis de ambiente de desenvolvimento (não devem ser rastreadas pelo controle de versão)      |
+| [`eslint.config.mjs`](/docs/app/api-reference/config/eslint)               | Arquivo de configuração do ESLint                                                                |
+| `.gitignore`                                                               | Arquivos e pastas a serem ignorados pelo Git                                                     |
+| [`next-env.d.ts`](/docs/app/api-reference/config/typescript#next-envdts)   | Arquivo de declaração TypeScript para o Next.js (não deve ser rastreado pelo controle de versão) |
+| `tsconfig.json`                                                            | Arquivo de configuração do TypeScript                                                            |
+| `jsconfig.json`                                                            | Arquivo de configuração do JavaScript                                                            |
+
+<AppOnly>
+
+### Arquivos de roteamento
+
+Adicione `page` para expor uma rota, `layout` para interfaces da pessoa usuária
+compartilhadas, como cabeçalho, navegação ou rodapé, `loading` para esqueletos
+de código, `error` para fronteiras de erro e `route` para APIs.
+
+|                                                                               |                     |                                         |
+| ----------------------------------------------------------------------------- | ------------------- |-----------------------------------------|
+| [`layout`](/docs/app/api-reference/file-conventions/layout)                   | `.js` `.jsx` `.tsx` | Layout                                  |
+| [`page`](/docs/app/api-reference/file-conventions/page)                       | `.js` `.jsx` `.tsx` | Página                                  |
+| [`loading`](/docs/app/api-reference/file-conventions/loading)                 | `.js` `.jsx` `.tsx` | UI de carregamento                      |
+| [`not-found`](/docs/app/api-reference/file-conventions/not-found)             | `.js` `.jsx` `.tsx` | UI de arquivo não encontrado            |
+| [`error`](/docs/app/api-reference/file-conventions/error)                     | `.js` `.jsx` `.tsx` | UI de erro                              |
+| [`global-error`](/docs/app/api-reference/file-conventions/error#global-error) | `.js` `.jsx` `.tsx` | UI de erro global                       |
+| [`route`](/docs/app/api-reference/file-conventions/route)                     | `.js` `.ts`         | Endpoint de API                         |
+| [`template`](/docs/app/api-reference/file-conventions/template)               | `.js` `.jsx` `.tsx` | Layout renderizado novamente            |
+| [`default`](/docs/app/api-reference/file-conventions/default)                 | `.js` `.jsx` `.tsx` | Página de fallback para rotas paralelas |
+
+### Rotas aninhadas
+
+Pastas definem segmentos de URL.
+Pastas aninhadas aninham segmentos.
+Layouts em qualquer nível envolvem seus segmentos filhos.
+Uma rota se torna pública quando um arquivo `page` ou `route` existe.
+
+| Caminho                     | Padrão de URL   | Observações                         |
+|-----------------------------|-----------------|-------------------------------------|
+| `app/layout.tsx`            | —               | Layout raiz envolve todas as rotas  |
+| `app/blog/layout.tsx`       | —               | Envolve `/blog` e seus descendentes |
+| `app/page.tsx`              | `/`             | Rota pública                        |
+| `app/blog/page.tsx`         | `/blog`         | Rota pública                        |
+| `app/blog/authors/page.tsx` | `/blog/authors` | Rota pública                        |
+
+### Rotas dinâmicas
+
+Parametrize segmentos com colchetes.
+Use `[segmento]` para um único parâmetro, `[...segmento]` para um parâmetro
+genérico e `[[...segmento]]` para um parâmetro genérico opcional.
+Acesse os valores através da propriedade
+`[`params`](/docs/app/api-reference/file-conventions/page#params-optional)`.
+
+| Caminho                         | Padrão de URL                                                        |
+|---------------------------------|----------------------------------------------------------------------|
+| `app/blog/[slug]/page.tsx`      | `/blog/my-first-post`                                                |
+| `app/shop/[...slug]/page.tsx`   | `/shop/clothing`, `/shop/clothing/shirts`                            |
+| `app/docs/[[...slug]]/page.tsx` | `/docs`, `/docs/layouts-and-pages`, `/docs/api-reference/use-router` |
+
+### Grupos de rotas e pastas privadas
+
+Organize o código sem alterar URLs com grupos de rotas
+[`(grupo)`](/docs/app/api-reference/file-conventions/route-groups#convention) e
+agrupe arquivos não roteáveis em pastas privadas
+[`_pasta`](#pastas-privadas).
+
+| Caminho                         | Padrão de URL | Observações                                                                |
+|---------------------------------|---------------|----------------------------------------------------------------------------|
+| `app/(marketing)/page.tsx`      | `/`           | Grupo omitido da URL                                                       |
+| `app/(shop)/cart/page.tsx`      | `/cart`       | Compartilha layouts dentro de `(shop)`                                     |
+| `app/blog/_components/Post.tsx` | —             | Não roteável; local seguro para utilitários de interface da pessoa usuária |
+| `app/blog/_lib/data.ts`         | —             | Não roteável; local seguro para utilitários                                |
+
+### Rotas paralelas e interceptadas
+
+Esses recursos se encaixam em padrões específicos de interface da pessoa
+usuária, como layouts baseados em slots ou roteamento modal.
+
+Use `@slot` para slots nomeados renderizados por um layout pai.
+Use padrões de interceptação para renderizar outra rota dentro do layout atual
+sem alterar a URL, por exemplo, para exibir uma visualização de detalhes como um
+modal sobre uma lista.
+
+| Padrão (docs)                                                                               | Significado                 | Caso de uso típico                            |
+|---------------------------------------------------------------------------------------------|-----------------------------|-----------------------------------------------|
+| [`@folder`](/docs/app/api-reference/file-conventions/parallel-routes#slots)                 | Slot nomeado                | Barra lateral + conteúdo principal            |
+| [`(.)folder`](/docs/app/api-reference/file-conventions/intercepting-routes#convention)      | Intercepta no mesmo nível   | Visualizar rota irmã em um modal              |
+| [`(..)folder`](/docs/app/api-reference/file-conventions/intercepting-routes#convention)     | Intercepta o pai            | Abrir um filho do pai como uma sobreposição   |
+| [`(..)(..)folder`](/docs/app/api-reference/file-conventions/intercepting-routes#convention) | Intercepta dois níveis      | Sobreposição profundamente aninhada           |
+| [`(...)folder`](/docs/app/api-reference/file-conventions/intercepting-routes#convention)    | Intercepta a partir da raiz | Mostrar rota arbitrária na visualização atual |
+
+### Convenções de arquivos de metadados
+
+#### Ícones de aplicação
+
+|                                                                                                                 |                                     |                                        |
+| --------------------------------------------------------------------------------------------------------------- | ----------------------------------- |----------------------------------------|
+| [`favicon`](/docs/app/api-reference/file-conventions/metadata/app-icons#favicon)                                | `.ico`                              | Arquivo favicon                        |
+| [`icon`](/docs/app/api-reference/file-conventions/metadata/app-icons#icon)                                      | `.ico` `.jpg` `.jpeg` `.png` `.svg` | Arquivo de ícone da aplicação          |
+| [`icon`](/docs/app/api-reference/file-conventions/metadata/app-icons#generate-icons-using-code-js-ts-tsx)       | `.js` `.ts` `.tsx`                  | Ícone gerado da aplicação              |
+| [`apple-icon`](/docs/app/api-reference/file-conventions/metadata/app-icons#apple-icon)                          | `.jpg` `.jpeg`, `.png`              | Arquivo de ícone da aplicação da Apple |
+| [`apple-icon`](/docs/app/api-reference/file-conventions/metadata/app-icons#generate-icons-using-code-js-ts-tsx) | `.js` `.ts` `.tsx`                  | Ícone gerado da aplicação da Apple     |
+
+#### Imagens do Open Graph e do Twitter
+
+|                                                                                                                             |                              |                              |
+| --------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |------------------------------|
+| [`opengraph-image`](/docs/app/api-reference/file-conventions/metadata/opengraph-image#opengraph-image)                      | `.jpg` `.jpeg` `.png` `.gif` | Arquivo da imagem Open Graph |
+| [`opengraph-image`](/docs/app/api-reference/file-conventions/metadata/opengraph-image#generate-images-using-code-js-ts-tsx) | `.js` `.ts` `.tsx`           | Imagem Open Graph gerada     |
+| [`twitter-image`](/docs/app/api-reference/file-conventions/metadata/opengraph-image#twitter-image)                          | `.jpg` `.jpeg` `.png` `.gif` | Arquivo da imagem do Twitter |
+| [`twitter-image`](/docs/app/api-reference/file-conventions/metadata/opengraph-image#generate-images-using-code-js-ts-tsx)   | `.js` `.ts` `.tsx`           | Imagem do Twitter gerada     |
+
+#### SEO
+
+|                                                                                                              |             |                       |
+| ------------------------------------------------------------------------------------------------------------ | ----------- |-----------------------|
+| [`sitemap`](/docs/app/api-reference/file-conventions/metadata/sitemap#sitemap-files-xml)                     | `.xml`      | Arquivo de sitemap    |
+| [`sitemap`](/docs/app/api-reference/file-conventions/metadata/sitemap#generating-a-sitemap-using-code-js-ts) | `.js` `.ts` | Sitemap gerado        |
+| [`robots`](/docs/app/api-reference/file-conventions/metadata/robots#static-robotstxt)                        | `.txt`      | Arquivo robots        |
+| [`robots`](/docs/app/api-reference/file-conventions/metadata/robots#generate-a-robots-file)                  | `.js` `.ts` | Arquivo robots gerado |
+
+</AppOnly>
+
+<PagesOnly>
+
+### Convenções de arquivos
+
+|                                                                                                             |                     |                              |
+| ----------------------------------------------------------------------------------------------------------- | ------------------- |------------------------------|
+| [`_app`](/docs/pages/building-your-application/routing/custom-app)                                          | `.js` `.jsx` `.tsx` | Aplicação personalizada      |
+| [`_document`](/docs/pages/building-your-application/routing/custom-document)                                | `.js` `.jsx` `.tsx` | Documento personalizado      |
+| [`_error`](/docs/pages/building-your-application/routing/custom-error#more-advanced-error-page-customizing) | `.js` `.jsx` `.tsx` | Página de erro personalizada |
+| [`404`](/docs/pages/building-your-application/routing/custom-error#404-page)                                | `.js` `.jsx` `.tsx` | Página de erro 404           |
+| [`500`](/docs/pages/building-your-application/routing/custom-error#500-page)                                | `.js` `.jsx` `.tsx` | Página de erro 500           |
+
+### Rotas
+
+|                                                                                                |                     |                 |
+|------------------------------------------------------------------------------------------------| ------------------- |-----------------|
+| **Convenção de pastas**                                                                        |                     |                 |
+| [`index`](/docs/pages/building-your-application/routing/pages-and-layouts#index-routes)        | `.js` `.jsx` `.tsx` | Página inicial  |
+| [`folder/index`](/docs/pages/building-your-application/routing/pages-and-layouts#index-routes) | `.js` `.jsx` `.tsx` | Página aninhada |
+| **Convenção de arquivos**                                                                      |                     |                 |
+| [`index`](/docs/pages/building-your-application/routing/pages-and-layouts#index-routes)        | `.js` `.jsx` `.tsx` | Página inicial  |
+| [`file`](/docs/pages/building-your-application/routing/pages-and-layouts)                      | `.js` `.jsx` `.tsx` | Página aninhada |
+
+### Rotas dinâmicas
+
+|                                                                                                                  |                     |                                     |
+|------------------------------------------------------------------------------------------------------------------| ------------------- |-------------------------------------|
+| **Convenção de pastas**                                                                                          |                     |                                     |
+| [`[pasta]/index`](/docs/pages/building-your-application/routing/dynamic-routes)                                  | `.js` `.jsx` `.tsx` | Segmento de rota dinâmica           |
+| [`[...pasta]/index`](/docs/pages/building-your-application/routing/dynamic-routes#catch-all-segments)            | `.js` `.jsx` `.tsx` | Segmento de rota pega-tudo          |
+| [`[[...pasta]]/index`](/docs/pages/building-your-application/routing/dynamic-routes#optional-catch-all-segments) | `.js` `.jsx` `.tsx` | Segmento opcional de rota pega-tudo |
+| **Convenção de arquivos**                                                                                        |                     |                                     |
+| [`[file]`](/docs/pages/building-your-application/routing/dynamic-routes)                                         | `.js` `.jsx` `.tsx` | Segmento de rota dinâmica           |
+| [`[...file]`](/docs/pages/building-your-application/routing/dynamic-routes#catch-all-segments)                   | `.js` `.jsx` `.tsx` | Segmento de rota pega-tudo          |
+| [`[[...file]]`](/docs/pages/building-your-application/routing/dynamic-routes#optional-catch-all-segments)        | `.js` `.jsx` `.tsx` | Segmento opcional de rota pega-tudo |
+
+</PagesOnly>
+
+<AppOnly>
+
+## Organizando seu projeto
+
+O Next.js **não impõe** uma forma específica de organizar e alocar os arquivos
+do seu projeto.
+No entanto, ele oferece diversos recursos para ajudar na organização.
+
+### Hierarquia de componentes
+
+Os componentes definidos em arquivos específicos são renderizados em uma
+hierarquia específica:
+
+- `layout.js`
+- `template.js`
+- `error.js` (fronteira de erro do React)
+- `loading.js` (fronteira de suspense do React)
+- `not-found.js` (fronteira de erro do React para a UI "não encontrado")
+- `page.js` ou `layout.js` aninhado
+
+<Image
+  alt="Hierarquia de componentes para convenções de arquivos"
+  srcLight="/docs/light/file-conventions-component-hierarchy.png"
+  srcDark="/docs/dark/file-conventions-component-hierarchy.png"
+  width="1600"
+  height="643"
+/>
+
+Os componentes são renderizados recursivamente em rotas aninhadas, o que
+significa que os componentes de um segmento de rota serão aninhados **dentro**
+dos componentes de seu segmento pai.
+
+<Image
+  alt="Hierarquia de componentes das convenções de arquivos aninhados"
+  srcLight="/docs/light/nested-file-conventions-component-hierarchy.png"
+  srcDark="/docs/dark/nested-file-conventions-component-hierarchy.png"
+  width="1600"
+  height="863"
+/>
+
+### Colocação
+
+No diretório `app`, pastas aninhadas definem a estrutura de rotas.
+Cada pasta representa um segmento de rota mapeado para um segmento
+correspondente em um caminho de URL.
+
+No entanto, mesmo que a estrutura de rotas seja definida por meio de pastas, uma
+rota **não é publicamente acessível** até que um arquivo `page.js` ou `route.js`
+seja adicionado a um segmento de rota.
+
+<Image
+  alt="Um diagrama mostrando como uma rota não é publicamente acessível até que um arquivo `page.js` ou `route.js` seja adicionado a um segmento de rota."
+  srcLight="/docs/light/project-organization-not-routable.png"
+  srcDark="/docs/dark/project-organization-not-routable.png"
+  width="1600"
+  height="444"
+/>
+
+E, mesmo quando uma rota é tornada publicamente acessível, apenas o **conteúdo
+retornado** por `page.js` ou `route.js` é enviado ao cliente.
+
+<Image
+  alt="Um diagrama mostrando como os arquivos page.js e route.js tornam as rotas publicamente acessíveis."
+  srcLight="/docs/light/project-organization-routable.png"
+  srcDark="/docs/dark/project-organization-routable.png"
+  width="1600"
+  height="687"
+/>
+
+Isso significa que os **arquivos de projeto** podem ser **colocados em conjunto
+com segurança** dentro de segmentos de rota no diretório `app` sem se tornarem
+roteáveis acidentalmente.
+
+<Image
+  alt="Um diagrama mostrando que arquivos de projeto colocados em conjunto não são roteáveis, mesmo quando um segmento contém um arquivo page.js ou route.js."
+  srcLight="/docs/light/project-organization-colocation.png"
+  srcDark="/docs/dark/project-organization-colocation.png"
+  width="1600"
+  height="1011"
+/>
+
+> **Bom saber**: Embora você **possa** colocar os arquivos do seu projeto no
+> diretório `app`, você não **precisa** fazer isso.
+> Se preferir, você pode
+> [mantê-los fora do diretório `app`](#armazene-arquivos-do-projeto-fora-de-app).
+
+### Pastas privadas
+
+Pastas privadas podem ser criadas prefixando o nome da pasta com um sublinhado:
+`_nomeDaPasta`.
+
+Isso indica que a pasta é um detalhe de implementação privado e não deve ser
+considerada pelo sistema de roteamento, **excluindo a pasta e todas as suas
+subpastas** do roteamento.
+
+<Image
+  alt="Um exemplo de estrutura de pastas usando pastas privadas"
+  srcLight="/docs/light/project-organization-private-folders.png"
+  srcDark="/docs/dark/project-organization-private-folders.png"
+  width="1600"
+  height="849"
+/>
+
+Como os arquivos no diretório `app` podem ser
+[colocados com segurança por padrão](#colocação), pastas privadas não são
+obrigatórias para a colocalização.
+No entanto, elas podem ser úteis para:
+
+- Separar a lógica da UI da lógica de roteamento.
+- Organizar arquivos internos de forma consistente em todo o projeto e no
+  ecossistema Next.js.
+- Ordenar e agrupar arquivos em editores de código.
+- Evitar possíveis conflitos de nomenclatura com futuras convenções de arquivos
+  do Next.js.
+
+> **Bom saber**:
+>
+> - Embora não seja uma convenção do framework, você também pode considerar
+>   marcar arquivos fora de pastas privadas como "privados" usando o mesmo
+>   padrão de sublinhado.
+> - Você pode criar segmentos de URL que começam com um sublinhado prefixando o
+>   nome da pasta com `%5F` (a forma codificada em URL de um sublinhado):
+>   `%5FfolderName`.
+> - Se você não usa pastas privadas, é útil conhecer as
+>   [convenções de arquivos especiais](/docs/app/getting-started/project-structure#arquivos-de-roteamento)
+>   do Next.js para evitar conflitos de nomes inesperados.
+
+### Grupos de rotas
+
+Grupos de rotas podem ser criados envolvendo uma pasta entre parênteses:
+`(nomeDaPasta)`
+
+Isso indica que a pasta é para fins de organização e **não deve ser incluída**
+no caminho da URL da rota.
+
+<Image
+  alt="Um exemplo de estrutura de pastas usando grupos de rotas"
+  srcLight="/docs/light/project-organization-route-groups.png"
+  srcDark="/docs/dark/project-organization-route-groups.png"
+  width="1600"
+  height="849"
+/>
+
+Os grupos de rotas são úteis para:
+
+- Organizar rotas por seção do site, intenção ou time.
+  Ex.: páginas de marketing, páginas administrativas, etc.
+- Habilitar layouts aninhados no mesmo nível de segmento de rota:
+  - [Criando vários layouts aninhados no mesmo segmento, incluindo vários layouts raiz](#criando-vários-layouts-raiz)
+  - [Adicionando um layout a um subconjunto de rotas em um segmento comum](#adicionando-segmentos-específicos-a-um-layout)
+
+### Pasta `src`
+
+O Next.js permite armazenar o código da aplicação (incluindo `app`) em uma
+[pasta `src`](/docs/app/api-reference/file-conventions/src-folder) opcional.
+Isso separa o código da aplicação dos arquivos de configuração do projeto, que
+geralmente ficam na raiz do projeto.
+
+<Image
+  alt="Um exemplo de estrutura de pastas com a pasta `src`"
+  srcLight="/docs/light/project-organization-src-directory.png"
+  srcDark="/docs/dark/project-organization-src-directory.png"
+  width="1600"
+  height="687"
+/>
+
+## Exemplos
+
+A seção a seguir apresenta uma visão geral de alto nível das estratégias mais
+comuns.
+A principal conclusão é escolher uma estratégia que funcione para você e seu
+time e manter a consistência em todo o projeto.
+
+> **Bom saber**: Nos exemplos abaixo, usamos as pastas `components` e `lib` como
+> marcadores genéricos.
+> Seus nomes não têm significado específico para nenhum framework e seus
+> projetos podem usar outras pastas, como `ui`, `utils`, `hooks`, `styles`, etc.
+
+### Armazene arquivos do projeto fora de `app`
+
+Essa estratégia armazena todo o código da aplicação em pastas compartilhadas na
+**raiz do seu projeto** e mantém o diretório `app` apenas para fins de
+roteamento.
+
+<Image
+  alt="Exemplo de estrutura de pastas com arquivos do projeto fora de app"
+  srcLight="/docs/light/project-organization-project-root.png"
+  srcDark="/docs/dark/project-organization-project-root.png"
+  width="1600"
+  height="849"
+/>
+
+### Armazene os arquivos do projeto em pastas de nível superior dentro de `app`
+
+Essa estratégia armazena todo o código da aplicação em pastas compartilhadas na
+**raiz do diretório `app`**.
+
+<Image
+  alt="Exemplo de estrutura de pastas com arquivos de projeto dentro de app"
+  srcLight="/docs/light/project-organization-app-root.png"
+  srcDark="/docs/dark/project-organization-app-root.png"
+  width="1600"
+  height="849"
+/>
+
+### Separe os arquivos do projeto por funcionalidade ou rota
+
+Essa estratégia armazena o código da aplicação compartilhado globalmente no
+diretório raiz `app` e **separa** o código mais específico da aplicação nos
+segmentos de rota que o utilizam.
+
+<Image
+  alt="Exemplo de estrutura de pastas com arquivos de projeto separados por funcionalidade ou rota"
+  srcLight="/docs/light/project-organization-app-root-split.png"
+  srcDark="/docs/dark/project-organization-app-root-split.png"
+  width="1600"
+  height="1011"
+/>
+
+### Organize as rotas sem afetar o caminho da URL
+
+Para organizar as rotas sem afetar a URL, crie um grupo para manter rotas
+relacionadas juntas.
+As pastas entre parênteses serão omitidas da URL (por exemplo, `(marketing)` ou
+`(shop)`).
+
+<Image
+  alt="Organizando rotas com grupos de rotas"
+  srcLight="/docs/light/route-group-organisation.png"
+  srcDark="/docs/dark/route-group-organisation.png"
+  width="1600"
+  height="930"
+/>
+
+Embora as rotas dentro de `(marketing)` e `(shop)` compartilhem a mesma
+hierarquia de URLs, você pode criar um layout diferente para cada grupo
+adicionando um arquivo `layout.js` dentro de suas pastas.
+
+<Image
+  alt="Grupos de rotas com vários layouts"
+  srcLight="/docs/light/route-group-multiple-layouts.png"
+  srcDark="/docs/dark/route-group-multiple-layouts.png"
+  width="1600"
+  height="768"
+/>
+
+### Adicionando segmentos específicos a um layout
+
+Para adicionar rotas específicas a um layout, crie um novo grupo de rotas (por
+exemplo, `(shop)`) e mova as rotas que compartilham o mesmo layout para dentro
+do grupo (por exemplo, `account` e `cart`).
+As rotas fora do grupo não compartilharão o layout (por exemplo, `checkout`).
+
+<Image
+  alt="Grupos de rotas com layouts opcionais"
+  srcLight="/docs/light/route-group-opt-in-layouts.png"
+  srcDark="/docs/dark/route-group-opt-in-layouts.png"
+  width="1600"
+  height="930"
+/>
+
+### Adicionando esqueletos de carregamento em uma rota específica
+
+Para aplicar um
+[esqueleto de carregamento](/docs/app/api-reference/file-conventions/loading)
+por meio de um arquivo `loading.js` a uma rota específica, crie um novo grupo de
+rotas (por exemplo, `/(overview)`) e mova seu arquivo `loading.tsx` para dentro
+desse grupo de rotas.
+
+<Image
+  alt="Estrutura de pastas mostrando um arquivo loading.tsx e um arquivo page.tsx dentro do grupo de rotas"
+  srcLight="/docs/light/route-group-loading.png"
+  srcDark="/docs/dark/route-group-loading.png"
+  width="1600"
+  height="444"
+/>
+
+Agora, o arquivo `loading.tsx` será aplicado somente à sua página dashboard →
+overview, e não a todas as páginas do dashboard, sem afetar a estrutura do
+caminho da URL.
+
+### Criando vários layouts raiz
+
+Para criar vários
+[layouts raiz](/docs/app/api-reference/file-conventions/layout#root-layout),
+remova o arquivo `layout.js` de nível superior e adicione um arquivo `layout.js`
+dentro de cada grupo de rotas.
+Isso é útil para dividir uma aplicação em seções com UI ou experiências
+completamente diferentes.
+As tags `<html>` e `<body>` precisam ser adicionadas a cada layout raiz.
+
+<Image
+  alt="Grupos de rotas com vários layouts raiz"
+  srcLight="/docs/light/route-group-multiple-root-layouts.png"
+  srcDark="/docs/dark/route-group-multiple-root-layouts.png"
+  width="1600"
+  height="687"
+/>
+
+No exemplo acima, tanto `(marketing)` quanto `(shop)` têm seu próprio layout
+raiz.
+
+</AppOnly>
